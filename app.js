@@ -1,67 +1,40 @@
-#Animal-details {
-    background-color: rgb(76, 33, 62);
-    height: 13px;
-    align-items: right;
-    display: flex;
-    padding-bottom: 110px;
-    padding-bottom: 115px;
-    justify-content: space-around;
-  }
+const div = document.getElementById("Animal-details");
+let url = "http://localhost:3000/characters"
 
 
-  .Animalinfo{
-    height: 650px;
-    padding: 20px;
-    font-size: 26px;
-    border: beige;
-    text-align: center;
-    padding-bottom: 23px;
-    padding-bottom: 0%;
-    align-items: bottom;
-  }
 
-  button {
-    background-color: rgb(48, 48, 78);
-    color: white;
-    margin: 20px;
-    font-size: 18px;
-    font-family: Arial, Helvetica, sans-serif;
-    align-items: center;
-    display: flex;
-  }
+function getAllAnimals() {
+  fetch(url)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
 
-
-  #img{
-    width: 280px;
-    height: 280px;
-  }
-
-
-  * {
-    font-family: Arial, Helvetica, sans-serif;
-  }
-
-  .symbol{
-    text-align: center;
-    background-color: rgb(76, 33, 62);
-    color: white;
-    padding: 0.2em;
-  }
-
-  h1{
-    color: white;
-    text-align: center;
-    font-size: 60px;
-  }
+      data.forEach((characters) => {
+        let span = document.createElement("span");
+        span.textContent = characters.name;
+        span.addEventListener("click", (e) => {
+          let name = document.getElementById("name");
+          name.textContent = characters.name;
+          let img = document.getElementById("img");
+          img.src = characters.image;
+          let voteCounts = document.getElementById("count-vote");
+          let votes = parseInt(characters.votes)
+          voteCounts.textContent = votes
+          let addVotes = document.getElementById("add-votes")
+          addVotes.addEventListener("click", function () {
+            voteCounts.textContent = votes++
+          })
+        });
+        div.appendChild(span);
+      });
+    });
+}
+getAllAnimals();
 
 
-  #Animal-details span {
-    height: 100px;
-    justify-content: right;
-    font-size: 30px;
-    padding: 10px;
-    align-items: right;
-    width: 100px;
-    display: flex;
-    text-align: center;
-  }
+
+let reset = document.getElementById("reset-button");
+reset.addEventListener("click", (e) => {
+  let totalVotes = document.getElementById("count-vote");
+  totalVotes.innerHTML = 0;
+});
